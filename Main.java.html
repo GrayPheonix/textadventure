@@ -1,0 +1,145 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">sql</span><span class="s2">.</span><span class="s0">SQLOutput</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">util</span><span class="s2">.</span><span class="s0">Random</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">util</span><span class="s2">.</span><span class="s0">Scanner</span><span class="s2">;</span>
+
+<span class="s3">// click the &lt;icon src=&quot;AllIcons.Actions.Execute&quot;/&gt; icon in the gutter.</span>
+<span class="s1">public class </span><span class="s0">Main </span><span class="s2">{</span>
+    <span class="s1">public static void </span><span class="s0">main</span><span class="s2">(</span><span class="s0">String</span><span class="s2">[] </span><span class="s0">args</span><span class="s2">) {</span>
+        <span class="s3">//Objects</span>
+        <span class="s0">Scanner in </span><span class="s2">= </span><span class="s1">new </span><span class="s0">Scanner</span><span class="s2">(</span><span class="s0">System</span><span class="s2">.</span><span class="s0">in</span><span class="s2">);</span>
+        <span class="s0">Random rand </span><span class="s2">= </span><span class="s1">new </span><span class="s0">Random</span><span class="s2">();</span>
+
+        <span class="s3">//Enemy Variables</span>
+        <span class="s0">String</span><span class="s2">[] </span><span class="s0">enemies </span><span class="s2">= {</span><span class="s4">&quot;Wolf&quot;</span><span class="s2">, </span><span class="s4">&quot;Assassin&quot;</span><span class="s2">, </span><span class="s4">&quot;Golem&quot;</span><span class="s2">, </span><span class="s4">&quot;Dragon&quot;</span><span class="s2">};</span>
+        <span class="s1">int </span><span class="s0">maxEnemyHealth </span><span class="s2">= </span><span class="s5">50</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">maxAttackDamage </span><span class="s2">= </span><span class="s5">25</span><span class="s2">;</span>
+
+        <span class="s3">//Player Variables</span>
+        <span class="s1">int </span><span class="s0">health </span><span class="s2">= </span><span class="s5">100</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">attackDamage </span><span class="s2">= </span><span class="s5">35</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">totalHealthPotions </span><span class="s2">= </span><span class="s5">3</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">healthPotionHealing </span><span class="s2">= </span><span class="s5">30</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">healthPotionDropchance </span><span class="s2">= </span><span class="s5">40</span><span class="s2">; </span><span class="s3">//Drop percentage from enemies</span>
+        <span class="s1">int </span><span class="s0">monstersDefeated </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">ranAwayTimes </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+        <span class="s1">int </span><span class="s0">potionsDrank </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+
+        <span class="s1">boolean </span><span class="s0">running </span><span class="s2">= </span><span class="s1">true</span><span class="s2">;</span>
+
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;You have entered the Dungeon&quot;</span><span class="s2">);</span>
+
+        <span class="s0">GAME</span><span class="s2">:</span>
+        <span class="s1">while </span><span class="s2">(</span><span class="s0">running</span><span class="s2">) {</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;****************************************&quot;</span><span class="s2">);</span>
+
+            <span class="s1">int </span><span class="s0">enemyHealth </span><span class="s2">= </span><span class="s0">rand</span><span class="s2">.</span><span class="s0">nextInt</span><span class="s2">(</span><span class="s0">maxEnemyHealth</span><span class="s2">);</span>
+            <span class="s0">String enemy </span><span class="s2">= </span><span class="s0">enemies</span><span class="s2">[</span><span class="s0">rand</span><span class="s2">.</span><span class="s0">nextInt</span><span class="s2">(</span><span class="s0">enemies</span><span class="s2">.</span><span class="s0">length</span><span class="s2">)];</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">* &quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot; has appeared! *</span><span class="s1">\n</span><span class="s4">&quot;</span><span class="s2">);</span>
+
+            <span class="s1">while </span><span class="s2">(</span><span class="s0">enemyHealth </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">) {</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">Your Health: &quot; </span><span class="s2">+ </span><span class="s0">health</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">&quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot;'s Health: &quot; </span><span class="s2">+ </span><span class="s0">enemyHealth</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\n\t</span><span class="s4">What will you do?&quot;</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">1. Attack&quot;</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">2. Drink Potion&quot;</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">3. Run Away&quot;</span><span class="s2">);</span>
+
+                <span class="s0">String input </span><span class="s2">= </span><span class="s0">in</span><span class="s2">.</span><span class="s0">nextLine</span><span class="s2">();</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;1&quot;</span><span class="s2">)) {</span>
+                    <span class="s1">int </span><span class="s0">damageDealt </span><span class="s2">= </span><span class="s0">rand</span><span class="s2">.</span><span class="s0">nextInt</span><span class="s2">(</span><span class="s0">attackDamage</span><span class="s2">);</span>
+                    <span class="s1">int </span><span class="s0">damageTaken </span><span class="s2">= </span><span class="s0">rand</span><span class="s2">.</span><span class="s0">nextInt</span><span class="s2">(</span><span class="s0">maxAttackDamage</span><span class="s2">);</span>
+
+                    <span class="s0">enemyHealth </span><span class="s2">-= </span><span class="s0">damageDealt</span><span class="s2">;</span>
+                    <span class="s0">health </span><span class="s2">-= </span><span class="s0">damageTaken</span><span class="s2">;</span>
+
+                    <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">&gt; You hit the &quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot; for &quot; </span><span class="s2">+ </span><span class="s0">damageDealt </span><span class="s2">+ </span><span class="s4">&quot; damage!&quot;</span><span class="s2">);</span>
+                    <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">&gt; You took &quot; </span><span class="s2">+ </span><span class="s0">damageTaken </span><span class="s2">+ </span><span class="s4">&quot; points of damage!&quot;</span><span class="s2">);</span>
+
+                    <span class="s1">if </span><span class="s2">(</span><span class="s0">health </span><span class="s2">&lt; </span><span class="s5">1</span><span class="s2">) {</span>
+                        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t</span><span class="s4">&gt; You are dead!&quot;</span><span class="s2">);</span>
+                        <span class="s1">break</span><span class="s2">;</span>
+                    <span class="s2">}</span>
+                <span class="s2">} </span><span class="s1">else if </span><span class="s2">(</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;2&quot;</span><span class="s2">)) {</span>
+                    <span class="s1">if </span><span class="s2">(</span><span class="s0">totalHealthPotions </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">) {</span>
+                        <span class="s0">health </span><span class="s2">+= </span><span class="s0">healthPotionHealing</span><span class="s2">;</span>
+                        <span class="s0">totalHealthPotions</span><span class="s2">--;</span>
+                        <span class="s0">potionsDrank</span><span class="s2">++;</span>
+                        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">You drank a Health Potion! You healed for &quot; </span><span class="s2">+ </span><span class="s0">healthPotionHealing </span><span class="s2">+ </span><span class="s4">&quot; points of health!&quot; </span><span class="s2">+ </span><span class="s4">&quot;</span><span class="s1">\n\t</span><span class="s4">&gt; You now have &quot; </span><span class="s2">+ </span><span class="s0">health </span><span class="s2">+ </span><span class="s4">&quot; HP! &quot; </span><span class="s2">+ </span><span class="s4">&quot;</span><span class="s1">\n\t </span><span class="s4">You now have: &quot; </span><span class="s2">+ </span><span class="s0">totalHealthPotions </span><span class="s2">+ </span><span class="s4">&quot; health potions!&quot;</span><span class="s2">);</span>
+
+                    <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">You have no health potions!&quot;</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                <span class="s2">} </span><span class="s1">else if </span><span class="s2">(</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;3&quot;</span><span class="s2">)) {</span>
+                    <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">You successfully ran away from the &quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot;!&quot;</span><span class="s2">);</span>
+                    <span class="s0">ranAwayTimes</span><span class="s2">++;</span>
+                    <span class="s1">continue </span><span class="s0">GAME</span><span class="s2">;</span>
+
+                <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                    <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">Nothing Happened!&quot;</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">health </span><span class="s2">&lt; </span><span class="s5">1</span><span class="s2">) {</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s1">\t </span><span class="s4">You died!&quot;</span><span class="s2">);</span>
+                <span class="s1">break</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">monstersDefeated</span><span class="s2">++;</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;****************************************&quot;</span><span class="s2">);</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * &quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot; was destroyed! *&quot;</span><span class="s2">);</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * You have &quot; </span><span class="s2">+ </span><span class="s0">health </span><span class="s2">+ </span><span class="s4">&quot; health remaining. * &quot;</span><span class="s2">);</span>
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">rand</span><span class="s2">.</span><span class="s0">nextInt</span><span class="s2">(</span><span class="s5">100</span><span class="s2">) &lt; </span><span class="s0">healthPotionDropchance</span><span class="s2">) {</span>
+                <span class="s0">totalHealthPotions</span><span class="s2">++;</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * The &quot; </span><span class="s2">+ </span><span class="s0">enemy </span><span class="s2">+ </span><span class="s4">&quot; dropped a health potion! * &quot;</span><span class="s2">);</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * You now have &quot; </span><span class="s2">+ </span><span class="s0">totalHealthPotions </span><span class="s2">+ </span><span class="s4">&quot; health potions! * &quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;****************************************&quot;</span><span class="s2">);</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;What would you like to do?&quot;</span><span class="s2">);</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;1. Find another Monster&quot;</span><span class="s2">);</span>
+            <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;2. Leave the dungeon!&quot;</span><span class="s2">);</span>
+
+            <span class="s0">String input </span><span class="s2">= </span><span class="s0">in</span><span class="s2">.</span><span class="s0">nextLine</span><span class="s2">();</span>
+
+            <span class="s1">while </span><span class="s2">(!</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;1&quot;</span><span class="s2">) &amp;&amp; !</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;2&quot;</span><span class="s2">)){</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;Nothing Happened!&quot;</span><span class="s2">);</span>
+                <span class="s0">input </span><span class="s2">= </span><span class="s0">in</span><span class="s2">.</span><span class="s0">nextLine</span><span class="s2">();</span>
+            <span class="s2">}</span>
+
+            <span class="s1">if</span><span class="s2">(</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;1&quot;</span><span class="s2">)){</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;You search for more monsters.&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+            <span class="s1">else if</span><span class="s2">(</span><span class="s0">input</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s4">&quot;2&quot;</span><span class="s2">)){</span>
+                <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;You exited the dungeon!&quot;</span><span class="s2">);</span>
+                <span class="s1">break</span><span class="s2">;</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;***************************&quot;</span><span class="s2">);</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * Thanks For Playing! * &quot;</span><span class="s2">);</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * You killed: &quot; </span><span class="s2">+</span><span class="s0">monstersDefeated</span><span class="s2">+ </span><span class="s4">&quot; monsters!&quot;</span><span class="s2">);</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * You ran away: &quot; </span><span class="s2">+ </span><span class="s0">ranAwayTimes</span><span class="s2">+ </span><span class="s4">&quot; times!&quot;</span><span class="s2">);</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot; * You drank &quot; </span><span class="s2">+ </span><span class="s0">potionsDrank </span><span class="s2">+ </span><span class="s4">&quot; potions!&quot;</span><span class="s2">);</span>
+        <span class="s0">System</span><span class="s2">.</span><span class="s0">out</span><span class="s2">.</span><span class="s0">println</span><span class="s2">(</span><span class="s4">&quot;***************************&quot;</span><span class="s2">);</span>
+
+    <span class="s2">}</span>
+    <span class="s2">}</span>
+</pre>
+</body>
+</html>
