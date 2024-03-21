@@ -1,5 +1,9 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class GAME {
