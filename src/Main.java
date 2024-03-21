@@ -7,8 +7,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame j = new JFrame();
         JButton b = new JButton();
-        combat c = new combat();
-        System.out.println();
+        GAME n = new GAME();
 
         j.setSize(500, 300);
         j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
