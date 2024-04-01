@@ -10,11 +10,6 @@ public class GAME {
     Scanner in = new Scanner(System.in);
     Random rand = new Random();
 
-    //Enemy Variables
-    String[] enemies = {"Wolf", "Assassin", "Golem", "Dragon"};
-    int maxEnemyHealth = 50;
-    int maxAttackDamage = 25;
-
     //Player Variables
     int health = 100;
     int attackDamage = 35;
