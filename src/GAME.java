@@ -14,7 +14,8 @@ public class GAME {
         boolean running = true; //is this used?
 
         //could let the person name the player?
-        Player player = new Player();
+        Player player = Player.getPlayer(); //get the player instance
+        Inventory inventory = Inventory.getPlayerInventory(); //get the inventory instance
         System.out.println("You have entered the Dungeon");
 
         GAME:
@@ -26,10 +27,6 @@ public class GAME {
             //the combat event would become another class, I think.
             Enemy enemy = new Enemy();
             enemy.initiate();
-
-            //this is not the inventory. This is so methods from Items can be called.
-            //Items would be made static? if Inventory is added and this would be unnecessary.
-            Items items = new Items();
 
             System.out.println("\t* " + enemy.getEnemyName() + " has appeared! *\n");
 
@@ -60,17 +57,16 @@ public class GAME {
                         }
                     }
                     case "2" -> { //use potion
-                        if (items.getTotalHealthPotions() > 0) {
-                            //change player health
-                            player.setHealth(player.getHealth()+items.getHealthPotionHealing());
-                            //remove a potion from the player
-                            items.minusPotion(1);
-                            //add to the lifetime stat
-                            player.addTotalPotionsDrank();
+                        HealingPotion healingPotion = (HealingPotion) inventory.getItem("healingPotion");
+                        //if there is a HealingPotion instance then healingPotion is now equal to that instance,
+                        //if there is not then healingPotion is now equal to null
+                        if (healingPotion != null) {
+                            int healthPotionHealing = healingPotion.getHealthPotionHealing();
+                            healingPotion.use();
                             System.out.println("\t You drank a Health Potion! " +
-                                    "You healed for " + items.getHealthPotionHealing() + " points of health!" +
+                                    "You healed for " + healthPotionHealing + " points of health!" +
                                     "\n\t> You now have " + player.getHealth() + " HP! " +
-                                    "\n\t You now have: " + items.getTotalHealthPotions() + " health potions!");
+                                    "\n\t You now have: " + healingPotion.getTotal() + " health potions!");
                         } else {
                             System.out.println("\t You have no health potions!");
                         }
@@ -94,9 +90,11 @@ public class GAME {
             System.out.println(" * " + enemy.getEnemyName() + " was destroyed! *");
             System.out.println(" * You have " + player.getHealth() + " health remaining. * ");
             if (rand.nextInt(100) < enemy.getHealthPotionDropchance()) {
-                items.addPotion(1);
+                HealingPotion healingPotion = new HealingPotion();
+                inventory.add(healingPotion);
+                healingPotion.changeTotalBy(1);
                 System.out.println(" * The " + enemy + " dropped a health potion! * ");
-                System.out.println(" * You now have " + items.getTotalHealthPotions() + " health potions! * ");
+                System.out.println(" * You now have " + healingPotion.getTotal() + " health potions! * ");
             }
             System.out.println("****************************************");
             System.out.println("What would you like to do?");
