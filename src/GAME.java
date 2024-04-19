@@ -10,96 +10,91 @@ public class GAME {
     Scanner in = new Scanner(System.in);
     Random rand = new Random();
 
-    //Enemy Variables
-    String[] enemies = {"Wolf", "Assassin", "Golem", "Dragon"};
-    int maxEnemyHealth = 50;
-    int maxAttackDamage = 25;
-
-    //Player Variables
-    int health = 100;
-    int attackDamage = 35;
-    int totalHealthPotions = 3;
-    int healthPotionHealing = 30;
-    int healthPotionDropchance = 40; //Drop percentage from enemies
-    int monstersDefeated = 0;
-    int ranAwayTimes = 0;
-    int potionsDrank = 0;
-
-
-
     public void Start() {
-        boolean running = true;
+        boolean running = true; //is this used?
 
+        //could let the person name the player?
+        Player player = Player.getPlayer(); //get the player instance
+        Inventory inventory = Inventory.getPlayerInventory(); //get the inventory instance
         System.out.println("You have entered the Dungeon");
 
         GAME:
         while (true) {
             System.out.println("****************************************");
 
-            int enemyHealth = rand.nextInt(maxEnemyHealth);
-            String enemy = enemies[rand.nextInt(enemies.length)];
-            System.out.println("\t* " + enemy + " has appeared! *\n");
+            //right now the only thing you can do is fight so an enemy gets
+            //generated right off the bat. If other stuff becomes possible then
+            //the combat event would become another class, I think.
+            Enemy enemy = new Enemy();
+            enemy.initiate();
 
+            System.out.println("\t* " + enemy.getEnemyName() + " has appeared! *\n");
+
+            //combat options
             label:
-            while (enemyHealth > 0) {
-                System.out.println("\t Your Health: " + health);
-                System.out.println("\t" + enemy + "'s Health: " + enemyHealth);
+            while (enemy.getEnemyHealth() > 0) {
+                System.out.println("\t Your Health: " + player.getHealth());
+                System.out.println("\t" + enemy.getEnemyName() + "'s Health: " + enemy.getEnemyHealth());
                 System.out.println("\n\tWhat will you do?");
                 System.out.println("\t1. Attack");
                 System.out.println("\t2. Drink Potion");
                 System.out.println("\t3. Run Away");
-
                 String input = in.nextLine();
                 switch (input) {
-                    case "1" -> {
-                        int damageDealt = rand.nextInt(attackDamage);
-                        int damageTaken = rand.nextInt(maxAttackDamage);
+                    case "1" -> { //attack
+                        int damageDealt = rand.nextInt(player.getAttackDamage());
+                        int damageTaken = rand.nextInt(player.getMaxAttackDamage());
 
-                        enemyHealth -= damageDealt;
-                        health -= damageTaken;
+                        enemy.setEnemyHealth(enemy.getEnemyHealth()-damageDealt);
+                        player.setHealth(player.getHealth()-damageTaken);
 
-                        System.out.println("\t> You hit the " + enemy + " for " + damageDealt + " damage!");
+                        System.out.println("\t> You hit the " + enemy.getEnemyName() + " for " + damageDealt + " damage!");
                         System.out.println("\t> You took " + damageTaken + " points of damage!");
 
-                        if (health < 1) {
+                        if (player.getHealth() < 1) {
                             System.out.println("\t> You are dead!");
                             break label;
                         }
                     }
-                    case "2" -> {
-                        if (totalHealthPotions > 0) {
-                            health += healthPotionHealing;
-                            totalHealthPotions--;
-                            potionsDrank++;
-                            System.out.println("\t You drank a Health Potion! You healed for " + healthPotionHealing + " points of health!" + "\n\t> You now have " + health + " HP! " + "\n\t You now have: " + totalHealthPotions + " health potions!");
-
+                    case "2" -> { //use potion
+                        HealingPotion healingPotion = (HealingPotion) inventory.getItem("healingPotion");
+                        //if there is a HealingPotion instance then healingPotion is now equal to that instance,
+                        //if there is not then healingPotion is now equal to null
+                        if (healingPotion != null) {
+                            int healthPotionHealing = healingPotion.getHealthPotionHealing();
+                            healingPotion.use();
+                            System.out.println("\t You drank a Health Potion! " +
+                                    "You healed for " + healthPotionHealing + " points of health!" +
+                                    "\n\t> You now have " + player.getHealth() + " HP! " +
+                                    "\n\t You now have: " + healingPotion.getTotal() + " health potions!");
                         } else {
                             System.out.println("\t You have no health potions!");
                         }
                     }
                     case "3" -> {
                         System.out.println("\t You successfully ran away from the " + enemy + "!");
-                        ranAwayTimes++;
+                        player.addRanAwayTimes(); //add to lifetime stat
                         continue GAME;
                     }
                     default -> {
                         System.out.println("\t Nothing Happened!");
-                        if (health < 1) {
+                        if (player.getHealth() < 1) {
                             System.out.println("\t You died!");
-                            break;
                         }
                     }
                 }
             }
 
-            monstersDefeated++;
+            player.addMonstersDefeated(); //add to lifetime stat
             System.out.println("****************************************");
-            System.out.println(" * " + enemy + " was destroyed! *");
-            System.out.println(" * You have " + health + " health remaining. * ");
-            if (rand.nextInt(100) < healthPotionDropchance) {
-                totalHealthPotions++;
+            System.out.println(" * " + enemy.getEnemyName() + " was destroyed! *");
+            System.out.println(" * You have " + player.getHealth() + " health remaining. * ");
+            if (rand.nextInt(100) < enemy.getHealthPotionDropchance()) {
+                HealingPotion healingPotion = new HealingPotion();
+                inventory.add(healingPotion);
+                healingPotion.changeTotalBy(1);
                 System.out.println(" * The " + enemy + " dropped a health potion! * ");
-                System.out.println(" * You now have " + totalHealthPotions + " health potions! * ");
+                System.out.println(" * You now have " + healingPotion.getTotal() + " health potions! * ");
             }
             System.out.println("****************************************");
             System.out.println("What would you like to do?");
@@ -121,9 +116,9 @@ public class GAME {
 
             System.out.println("***************************");
             System.out.println(" * Thanks For Playing! * ");
-            System.out.println(" * You killed: " + monstersDefeated + " monsters!");
-            System.out.println(" * You ran away: " + ranAwayTimes + " times!");
-            System.out.println(" * You drank " + potionsDrank + " potions!");
+            System.out.println(" * You killed: " + player.getMonstersDefeated() + " monsters!");
+            System.out.println(" * You ran away: " + player.getRanAwayTimes() + " times!");
+            System.out.println(" * You drank " + player.getTotalPotionsDrank() + " potions!");
             System.out.println("***************************");
         }
     }
