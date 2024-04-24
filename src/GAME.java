@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -296,8 +295,15 @@ public class GAME implements ActionListener {
 
             label:
             while (enemyHealth > 0) {
+                //typewriterEffect(l3, "test check start"); //testing
                 while (true) {
-                    clearScreen();
+                    //typewriterEffect(l4, "test check start two"); //testing
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                    //clearScreen();
                     typewriterEffect(l2,"> Your Health: " + health);
                     typewriterEffect(l3,"> " + enemy + "'s Health: " + enemyHealth);
                     typewriterEffect(l4,"> What will you do? (Press 1, 2, or 3 on your keyboard)");
@@ -306,21 +312,24 @@ public class GAME implements ActionListener {
                     typewriterEffect(l7,r.getText());
                     //wait until the player presses 1, 2, or 3
                     try {
-                        action = sc.nextInt();
+                        typewriterEffect(l3, "try taking nextInt"); //testing
+                        action = sc.nextInt(); //it stops here??
+                        typewriterEffect(l4, "nextInt was taken: " + action); //testing
                         if(action > 3 || action < 1){
-                            clearScreen();
+                            //clearScreen();
                             typewriterEffect(l, "Please try again.");
                             continue;
                         }
+                        typewriterEffect(l5, "before the break"); //testing
                         break;
-                    }catch(InputMismatchException e){
-                        clearScreen();
+                    }catch(Exception e){
+                        //clearScreen();
                         typewriterEffect(l, "Please try again.");
                     }
                 }
-
+                typewriterEffect(l4, "before the action ifs"); //testing
                 if (action==1) {
-                    clearScreen();
+                    //clearScreen();
                     int damageDealt = rand.nextInt(attackDamage);
                     int damageTaken = rand.nextInt(maxAttackDamage);
                     enemyHealth -= damageDealt;
@@ -332,7 +341,8 @@ public class GAME implements ActionListener {
                         //TODO game over screen
                     }
                 } else if (action==2) {
-                    clearScreen();
+                    //clearScreen();
+                    typewriterEffect(l, "test check action two start"); //testing
                     if (totalHealthPotions > 0) {
                         health += healthPotionHealing;
                         --totalHealthPotions;
@@ -343,8 +353,9 @@ public class GAME implements ActionListener {
                     } else {
                         typewriterEffect(l,"> You have no health potions!");
                     }
+                    typewriterEffect(l2, "test check action two end"); //testing
                 } else if (action==3){
-                    clearScreen();
+                    //clearScreen();
                     if (arrayList.contains(r)) {
                         //TODO (optional) make running away have a chance of failing
                         typewriterEffect(l,"> You successfully ran away from the " + enemy + "!");
@@ -353,13 +364,13 @@ public class GAME implements ActionListener {
                     }
                 }else{
                     //players should not get here but if they do
-                    clearScreen();
+                    //clearScreen();
                     typewriterEffect(l, "There was an error. Please try again.");
                 }
             }
 
             //win screen
-            clearScreen();
+            //clearScreen();
             monstersDefeated++;
             ++goldDrop;
             totalGold = goldDrop + totalGold;
@@ -391,18 +402,18 @@ public class GAME implements ActionListener {
                 try {
                     action = sc.nextInt();
                     if (action > 3 || action < 1) {
-                        clearScreen();
+                        //clearScreen();
                         typewriterEffect(l, "Please try again.");
                         continue;
                     }
                     break;
                 } catch (InputMismatchException e) {
-                    clearScreen();
+                    //clearScreen();
                     typewriterEffect(l, "Please try again.");
                 }
 
                 if (action == 1) {
-                    clearScreen();
+                    //clearScreen();
                     typewriterEffect(l, "> You search for more monsters.");
                     try {
                         Thread.sleep(500);
@@ -411,11 +422,11 @@ public class GAME implements ActionListener {
                     }
                     continue GAME;
                 } else if (action == 2) {
-                    clearScreen();
+                    //clearScreen();
                     typewriterEffect(l, "> You exited the dungeon!");
                     break;
                 } else if (action == 3) {
-                    clearScreen();
+                    //clearScreen();
                     if (totalGold >= 10) {
                         attackDamage += attackDamage + 10;
                         totalGold = totalGold - 10;
@@ -430,7 +441,7 @@ public class GAME implements ActionListener {
                     }
                 } else {
                     //the player should not get here but if they do
-                    clearScreen();
+                    //clearScreen();
                     typewriterEffect(l, "There was an error. Please try again.");
                 }
             }
@@ -444,7 +455,7 @@ public class GAME implements ActionListener {
 
             running =false;
         }
-        //end GAME:
+        //end GAME
     }
     public static void main(String[] args){
         GAME game = new GAME();
