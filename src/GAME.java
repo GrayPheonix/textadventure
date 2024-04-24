@@ -249,7 +249,7 @@ public class GAME implements ActionListener {
         String temp = "";
         for(int i = 0; i<str.length(); i++) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(80);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
@@ -279,7 +279,7 @@ public class GAME implements ActionListener {
         typewriterEffect(l, "> You have entered the Dungeon");
 
         GAME:
-        while (true) {
+        while (running) {
             typewriterEffect(l2,"****************************************");
             int enemyHealth = rand.nextInt(maxEnemyHealth);
             String enemy = enemies[rand.nextInt(enemies.length)];
@@ -293,6 +293,8 @@ public class GAME implements ActionListener {
                 typewriterEffect(l5,a.getText());
                 typewriterEffect(l6,d.getText());
                 typewriterEffect(l7,r.getText());
+
+                //wait until the player presses something
 
                 if (arrayList.contains(a)) {
                     int damageDealt = rand.nextInt(attackDamage);
@@ -346,6 +348,7 @@ public class GAME implements ActionListener {
             s.setVisible(true);
             typewriterEffect(l10,s.getText());
 
+            //wait for the player to press something
 
             if (arrayList.contains(f)) {
                 typewriterEffect(l,"> You search for more monsters.");
@@ -365,6 +368,13 @@ public class GAME implements ActionListener {
             typewriterEffect(l4,"> * You ran away: " + ranAwayTimes + " times!");
             typewriterEffect(l5,"> * You drank " + potionsDrank + " potions!");
             typewriterEffect(l6,"***************************");
+
+            running =false;
         }
+        //end GAME:
+    }
+    public static void main(String args[]){
+        GAME game = new GAME();
+        game.Start();
     }
 }
