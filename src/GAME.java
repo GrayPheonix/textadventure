@@ -1,13 +1,18 @@
 import java.awt.*;
+import java.io.InvalidClassException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import java.util.Scanner;
 
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class GAME implements ActionListener {
     Random rand = new Random();
+    Scanner sc = new Scanner(System.in);
+    int action;
 
     ArrayList<Object> arrayList = new ArrayList<>();
     //Enemy Variables
@@ -27,6 +32,7 @@ public class GAME implements ActionListener {
     int goldDrop = 15;
     int totalGold = 0;
     int gold = 0;
+    boolean dropHP;
 
     Insets insets;
 
@@ -43,8 +49,8 @@ public class GAME implements ActionListener {
     JButton a = new JButton("> 1. Attack");
     JButton d = new JButton("> 2. Drink Potion");
     JButton r = new JButton("> 3. Run Away");
-    JButton f = new JButton("> 1. Find another Monster");
-    JButton le = new JButton("> 2. Leave The dungeon!");
+    JButton f = new JButton("> 1. Find another monster!");
+    JButton le = new JButton("> 2. Leave the dungeon!");
     JButton s = new JButton("> 3. Upgrade your sword!");
 
     public void GUI(){
@@ -249,7 +255,7 @@ public class GAME implements ActionListener {
         String temp = "";
         for(int i = 0; i<str.length(); i++) {
             try {
-                Thread.sleep(80);
+                Thread.sleep(100);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
@@ -262,6 +268,9 @@ public class GAME implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         e.getActionCommand();
         arrayList.add(e.getSource());
+    }
+
+    public void clearScreen(){
         l.setText("");
         l2.setText("");
         l3.setText("");
@@ -287,16 +296,31 @@ public class GAME implements ActionListener {
 
             label:
             while (enemyHealth > 0) {
-                typewriterEffect(l2,"> Your Health: " + health);
-                typewriterEffect(l3,"> " + enemy + "'s Health: " + enemyHealth);
-                typewriterEffect(l4,"> What will you do?");
-                typewriterEffect(l5,a.getText());
-                typewriterEffect(l6,d.getText());
-                typewriterEffect(l7,r.getText());
+                while (true) {
+                    clearScreen();
+                    typewriterEffect(l2,"> Your Health: " + health);
+                    typewriterEffect(l3,"> " + enemy + "'s Health: " + enemyHealth);
+                    typewriterEffect(l4,"> What will you do? (Press 1, 2, or 3 on your keyboard)");
+                    typewriterEffect(l5,a.getText());
+                    typewriterEffect(l6,d.getText());
+                    typewriterEffect(l7,r.getText());
+                    //wait until the player presses 1, 2, or 3
+                    try {
+                        action = sc.nextInt();
+                        if(action > 3 || action < 1){
+                            clearScreen();
+                            typewriterEffect(l, "Please try again.");
+                            continue;
+                        }
+                        break;
+                    }catch(InputMismatchException e){
+                        clearScreen();
+                        typewriterEffect(l, "Please try again.");
+                    }
+                }
 
-                //wait until the player presses something
-
-                if (arrayList.contains(a)) {
+                if (action==1) {
+                    clearScreen();
                     int damageDealt = rand.nextInt(attackDamage);
                     int damageTaken = rand.nextInt(maxAttackDamage);
                     enemyHealth -= damageDealt;
@@ -305,8 +329,10 @@ public class GAME implements ActionListener {
                     typewriterEffect(l2,"> You took " + damageTaken + " points of damage!");
                     if (health < 1) {
                         typewriterEffect(l3,"> You are dead!");
+                        //TODO game over screen
                     }
-                } else if (arrayList.contains(d)) {
+                } else if (action==2) {
+                    clearScreen();
                     if (totalHealthPotions > 0) {
                         health += healthPotionHealing;
                         --totalHealthPotions;
@@ -317,49 +343,96 @@ public class GAME implements ActionListener {
                     } else {
                         typewriterEffect(l,"> You have no health potions!");
                     }
-                } else {
+                } else if (action==3){
+                    clearScreen();
                     if (arrayList.contains(r)) {
+                        //TODO (optional) make running away have a chance of failing
                         typewriterEffect(l,"> You successfully ran away from the " + enemy + "!");
                         ++ranAwayTimes;
                         continue GAME;
                     }
+                }else{
+                    //players should not get here but if they do
+                    clearScreen();
+                    typewriterEffect(l, "There was an error. Please try again.");
                 }
-                break;
             }
 
+            //win screen
+            clearScreen();
             monstersDefeated++;
             ++goldDrop;
             totalGold = goldDrop + totalGold;
-            typewriterEffect(l,"****************************************");
-            typewriterEffect(l2,"> * " + enemy + " was destroyed! *");
-            typewriterEffect(l3,"> * You have " + health + " health remaining. * ");
-            typewriterEffect(l4," * You now have " + totalGold + " gold! * ");
             if (rand.nextInt(100) < healthPotionDropchance) {
+                dropHP = true;
                 totalHealthPotions++;
-                typewriterEffect(l4,"> * The " + enemy + " dropped a health potion! * ");
-                typewriterEffect(l5,"> * You now have " + totalHealthPotions + " health potions! * ");
+            }else{
+                dropHP = false;
             }
-            typewriterEffect(l6,"****************************************");
-            typewriterEffect(l7,"> What would you like to do?");
-            f.setVisible(true);
-            typewriterEffect(l8,f.getText());
-            le.setVisible(true);
-            typewriterEffect(l9,le.getText());
-            s.setVisible(true);
-            typewriterEffect(l10,s.getText());
+            while (true) {
+                typewriterEffect(l, "****************************************");
+                typewriterEffect(l2, "> * " + enemy + " was destroyed! *");
+                typewriterEffect(l3, "> * You have " + health + " health remaining. * ");
+                typewriterEffect(l4, "> * You now have " + totalGold + " gold! * ");
+                if (dropHP) {
+                    typewriterEffect(l5, "> * The " + enemy + " dropped a health potion! * ");
+                    typewriterEffect(l6, "> * You now have " + totalHealthPotions + " health potions! * ");
+                }
+                //typewriterEffect(l7,"****************************************");
+                typewriterEffect(l7, "> What would you like to do? (Press 1, 2, or 3 on your keyboard)");
+                f.setVisible(true);
+                typewriterEffect(l8, f.getText());
+                le.setVisible(true);
+                typewriterEffect(l9, le.getText());
+                s.setVisible(true);
+                typewriterEffect(l10, s.getText());
 
-            //wait for the player to press something
+                //wait for the player to press 1, 2, or 3
+                try {
+                    action = sc.nextInt();
+                    if (action > 3 || action < 1) {
+                        clearScreen();
+                        typewriterEffect(l, "Please try again.");
+                        continue;
+                    }
+                    break;
+                } catch (InputMismatchException e) {
+                    clearScreen();
+                    typewriterEffect(l, "Please try again.");
+                }
 
-            if (arrayList.contains(f)) {
-                typewriterEffect(l,"> You search for more monsters.");
-            } else if (arrayList.contains(le)) {
-                typewriterEffect(l,"> You exited the dungeon!");
-                break;
-            } else if (arrayList.contains(s) && totalGold >= 10){
-                attackDamage += attackDamage + 10;
-            }
-            else if (arrayList.contains(s) && totalGold < 10){
-                typewriterEffect(l,"> You don't have enough gold!");
+                if (action == 1) {
+                    clearScreen();
+                    typewriterEffect(l, "> You search for more monsters.");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                    continue GAME;
+                } else if (action == 2) {
+                    clearScreen();
+                    typewriterEffect(l, "> You exited the dungeon!");
+                    break;
+                } else if (action == 3) {
+                    clearScreen();
+                    if (totalGold >= 10) {
+                        attackDamage += attackDamage + 10;
+                        totalGold = totalGold - 10;
+                        typewriterEffect(l, "> You successfully upgraded your weapon!");
+                    } else {
+                        typewriterEffect(l, "> You don't have enough gold for that!");
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    //the player should not get here but if they do
+                    clearScreen();
+                    typewriterEffect(l, "There was an error. Please try again.");
+                }
             }
 
             typewriterEffect(l,"***************************");
@@ -373,7 +446,7 @@ public class GAME implements ActionListener {
         }
         //end GAME:
     }
-    public static void main(String args[]){
+    public static void main(String[] args){
         GAME game = new GAME();
         game.Start();
     }
