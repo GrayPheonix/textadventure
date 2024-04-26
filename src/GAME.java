@@ -4,10 +4,12 @@ import java.util.Random;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import java.util.Scanner;
 
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class GAME implements ActionListener {
     Random rand = new Random();
+    Scanner sc = new Scanner(System.in);
 
     ArrayList<Object> arrayList = new ArrayList<>();
     //Enemy Variables
@@ -273,6 +275,29 @@ public class GAME implements ActionListener {
         l9.setText("");
     }
 
+    public void addToArrayListMainMenu(int input){
+        switch(input){
+            case 1:
+                arrayList.add(f.getText());
+            case 2:
+                arrayList.add(le.getText());
+            case 3:
+                arrayList.add(s.getText());
+        }
+
+    }
+    public void addToArrayListFightMenu(int input){
+        l3.setText("fightmenu");
+        switch(input) {
+            case 1:
+                arrayList.add(a.getText());
+            case 2:
+                arrayList.add(d.getText());
+            case 3:
+                arrayList.add(r.getText());
+        }
+    }
+
     public void Start() {
         boolean running = true;
         GUI();
@@ -294,6 +319,9 @@ public class GAME implements ActionListener {
                 typewriterEffect(l6,d.getText());
                 typewriterEffect(l7,r.getText());
 
+                addToArrayListFightMenu(waitUntilInput());//waits until input and then adds the corresponding button text to arrayList
+
+                l.setText(arrayList.toString());
                 if (arrayList.contains(a)) {
                     int damageDealt = rand.nextInt(attackDamage);
                     int damageTaken = rand.nextInt(maxAttackDamage);
@@ -346,6 +374,7 @@ public class GAME implements ActionListener {
             s.setVisible(true);
             typewriterEffect(l10,s.getText());
 
+            addToArrayListMainMenu(waitUntilInput());
 
             if (arrayList.contains(f)) {
                 typewriterEffect(l,"> You search for more monsters.");
@@ -365,7 +394,19 @@ public class GAME implements ActionListener {
             typewriterEffect(l4,"> * You ran away: " + ranAwayTimes + " times!");
             typewriterEffect(l5,"> * You drank " + potionsDrank + " potions!");
             typewriterEffect(l6,"***************************");
+            sc.close();
             running = false;
         }
+    }
+    public int waitUntilInput(){
+        l2.setText("waiting"); //this prints
+        int input = 0;
+        try {
+            input = sc.nextInt();
+            l4.setText(String.valueOf(input)); //this doesn't print
+        }catch(Exception e){
+            l5.setText("error taking int"); //this doesn't print EITHER
+        }
+        return input;
     }
 }
