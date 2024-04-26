@@ -44,7 +44,7 @@ public class GAME implements ActionListener {
     JButton d = new JButton("> 2. Drink Potion");
     JButton r = new JButton("> 3. Run Away");
     JButton f = new JButton("> 1. Find another Monster");
-    JButton le = new JButton("> 2. Leave The dungeon!");
+    JButton le = new JButton("> 2. Leave the dungeon!");
     JButton s = new JButton("> 3. Upgrade your sword!");
 
     public void GUI(){
