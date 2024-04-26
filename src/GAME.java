@@ -279,7 +279,7 @@ public class GAME implements ActionListener {
         typewriterEffect(l, "> You have entered the Dungeon");
 
         GAME:
-        while (true) {
+        while (running) {
             typewriterEffect(l2,"****************************************");
             int enemyHealth = rand.nextInt(maxEnemyHealth);
             String enemy = enemies[rand.nextInt(enemies.length)];
@@ -365,6 +365,7 @@ public class GAME implements ActionListener {
             typewriterEffect(l4,"> * You ran away: " + ranAwayTimes + " times!");
             typewriterEffect(l5,"> * You drank " + potionsDrank + " potions!");
             typewriterEffect(l6,"***************************");
+            running = false;
         }
     }
 }
