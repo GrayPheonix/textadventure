@@ -28,6 +28,8 @@ public class Inventory {
         System.out.println("You do not have any " + targetType + ".");
         return null;
     }
+    //returns the Item at the index
+    public Item getIndex(int index){ return inventory.get(index); }
     //this does the same thing as the total var in Item
     public int getHowMany(Item targetItem){
         String targetType = targetItem.getType();
@@ -49,14 +51,16 @@ public class Inventory {
         }else if(inventory.size() + 1 > maxInventorySize) {
             System.out.println("Your inventory is full.");
         }else{
-            inventory.add(item);
+            inventory.add(item); //lowercase inventory is the instance
             item.changeTotalBy(1);
         }
     }
     public void drop(Item item){
-        //TODO iterate inventory until finding an item of the specified type,
-        //TODO .remove(index of the found item), then STOP iterating
-
+        if (inventory.contains(item)){
+            inventory.remove(item); //lowercase inventory is the instance
+        }else{
+            System.out.println("You have no " + item.toString() + " in your inventory.");
+        }
         //change the total
         item.changeTotalBy(-1);
     }

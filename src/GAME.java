@@ -15,9 +15,13 @@ public class GAME {
     public JFrame frame;
     public JTextArea textArea;
     public int choice;
+    public int inventoryTemp; //temp var needed for the inventory menu to work
+    public int inventoryIndex; //used to pop up the right item clicked in inventory
+    public int inventoryChoice; //used to choose what to do after an item is clicked in inventory
     public int maxEnemyHealth = 50;
     public int maxAttackDamage = 25;
     //Player Variables
+    Inventory inventory = Inventory.getPlayerInventory();
     public int health = 100;
     public int attackDamage = 35;
     public int totalHealthPotions = 3;
@@ -145,6 +149,12 @@ public class GAME {
                 clearLabels();
             });
 
+            addButton("> 4. Check Inventory", 7, e -> {
+                choice = 7; //I think this isn't used yet?
+                removeButtons();
+                clearLabels();
+            });
+
             waitForAction();
 
             if (choice == 1) {
@@ -173,13 +183,31 @@ public class GAME {
                 }
                 clearLabels();
                 continue;
-            } else {
-                if (choice == 3) {
-                    textArea.setText("");
-                    typewriterEffect("> You successfully ran away from the " + enemy + "!", 0);
-                    ++ranAwayTimes;
+            } else if (choice == 3){
+                textArea.setText("");
+                typewriterEffect("> You successfully ran away from the " + enemy + "!", 0);
+                ++ranAwayTimes;
+                clearLabels();
+                break;
+            } else if (choice == 7){
+                textArea.setText("");
+                typewriterEffect("> Inventory: ", 0);
+                for(int i = 0; i < inventory.getInventorySize(); i++){
+                    inventoryTemp = i;
+                    addButton("> " + (i+1) + ". " + inventory.getIndex(i).toString(), i, e -> {
+                        inventoryIndex = inventoryTemp;
+                        removeButtons();
+                        clearLabels();
+                    });
+                }
+                addButton("> Back", inventory.getInventorySize()-1, e -> {
+                    choice = 8;
+                    removeButtons();
                     clearLabels();
-                    break;
+                });
+                if (choice != 8){ //skip this if > Back is clicked
+                    typewriterEffect("> What do you want to do with " + inventory.getIndex(inventoryIndex).toString() + " ?", 0);
+                    //TODO if we even get here then we want Drop, Use, and Back as options
                 }
             }
 
@@ -218,7 +246,7 @@ public class GAME {
                 });
 
             }
-            else {
+            else { //this should catch the choice = 8 from line 203
                 typewriterEffect("> What would you like to do?", 0);
 
                 addButton("> 1. Search for more Monsters", 1, e -> {
