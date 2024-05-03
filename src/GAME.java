@@ -181,6 +181,7 @@ public class GAME {
                     }
                     typewriterEffect("> Your Health: " + health, 2);
                     typewriterEffect("> " + enemy + "'s Health: " + enemyHealth, 3);
+                    clearLabels();
 
                 }
             } //Attack
@@ -238,7 +239,7 @@ public class GAME {
             if (enemyHealth <= 0) {
                 typewriterEffect("> * " + enemy + " was destroyed! *", 0);
                 typewriterEffect("> * You have " + health + " health remaining. * ", 1);
-                typewriterEffect(" * You now have " + totalGold + " gold! * ", 2);
+                typewriterEffect("> * You now have " + totalGold + " gold! * ", 2);
                 if (rand.nextInt(100) < healthPotionDropchance) {
                     totalHealthPotions++;
                     typewriterEffect("> * The " + enemy + " dropped a health potion! * ", 3);
@@ -304,6 +305,60 @@ public class GAME {
 
                 break;
             }
+
+            typewriterEffect("> What would you like to do?", 6);
+
+            addButton("> 1. Search for more Monsters", 7, e -> {
+                choice = 4;
+                removeButtons();
+                clearLabels();
+            });
+
+            addButton("> 2. Exit the Dungeon", 8, e -> {
+                choice = 5;
+                removeButtons();
+                clearLabels();
+            });
+
+            addButton("> 3. Upgrade Attack", 9, e -> {
+                choice = 6;
+                removeButtons();
+                clearLabels();
+            });
+
+            waitForAction();
+
+            if (choice == 5) {
+                typewriterEffect("***************************", 0);
+                typewriterEffect("> * Thanks For Playing! * ", 1);
+                typewriterEffect("> * You killed: " + monstersDefeated + " monsters!", 2);
+                typewriterEffect("> * You ran away: " + ranAwayTimes + " times!", 3);
+                typewriterEffect("> * You drank " + potionsDrank + " potions!", 4);
+                typewriterEffect("***************************", 5);
+                try {
+                    Thread.sleep(10000); // Wait for 10 seconds
+                } catch (InterruptedException ignored) {
+                }
+                System.exit(0); // Exit the program
+            }
+
+            if (choice == 4) {
+                typewriterEffect("> You search for more monsters.", 0);
+                clearLabels();
+                continue;
+            } else if (choice == 6 && totalGold >= 10) {
+                attackDamage += attackDamage + 10;
+                totalGold += totalGold - 10;
+                typewriterEffect("> Your Attack Damage is now " + attackDamage, 0);
+                clearLabels();
+                continue;
+            } else if (choice == 6 && totalGold < 10) {
+                typewriterEffect("> You don't have enough gold!", 0);
+                clearLabels();
+                continue;
+            }
+
+            break;
         }
     }
     private void waitForAction() {
