@@ -168,6 +168,7 @@ public class GAME {
                     }
                     typewriterEffect("> Your Health: " + health, 2);
                     typewriterEffect("> " + enemy + "'s Health: " + enemyHealth, 3);
+                    clearLabels();
 
                 }
             }
@@ -202,7 +203,7 @@ public class GAME {
             if (enemyHealth <= 0) {
                 typewriterEffect("> * " + enemy + " was destroyed! *", 0);
                 typewriterEffect("> * You have " + health + " health remaining. * ", 1);
-                typewriterEffect(" * You now have " + totalGold + " gold! * ", 2);
+                typewriterEffect("> * You now have " + totalGold + " gold! * ", 2);
                 if (rand.nextInt(100) < healthPotionDropchance) {
                     totalHealthPotions++;
                     typewriterEffect("> * The " + enemy + " dropped a health potion! * ", 3);
@@ -254,7 +255,7 @@ public class GAME {
             } else if (choice == 6 && totalGold >= 10) {
                 attackDamage += attackDamage + 10;
                 totalGold += totalGold - 10;
-                typewriterEffect("> Your Attack Damage is now" + attackDamage, 0);
+                typewriterEffect("> Your Attack Damage is now " + attackDamage, 0);
                 clearLabels();
                 continue;
             } else if (choice == 6 && totalGold < 10) {
